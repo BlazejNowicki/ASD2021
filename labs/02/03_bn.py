@@ -4,8 +4,8 @@ def mergesort(T):
     A,x = mergesort(T[:l//2])
     B,y = mergesort(T[l//2:])
     inv_counter=x+y
-    i=j=k=0
-    while i<len(A) or j<len(B):
+    i=j=0
+    for k in range(l):
         if j>=len(B) or ( i<len(A) and A[i] <= B[j] ):
             T[k]=A[i]
             i += 1
@@ -13,7 +13,6 @@ def mergesort(T):
             T[k]=B[j]
             j += 1
             inv_counter += len(A)-i
-        k += 1
     return T, inv_counter
 
 def inversions(T):
