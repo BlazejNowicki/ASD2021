@@ -20,7 +20,7 @@ def inversions(T):
     return ans
 
 if __name__ == "__main__":
-    # not sure it always works
+    # not sure if it always works
     T=[10,22,3,4,5,6,8,16]
     print(T)
     print(inversions(T))
