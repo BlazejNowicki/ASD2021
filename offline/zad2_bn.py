@@ -24,29 +24,31 @@ def partition(L):
             q_end = ptr
         ptr = ptr.next
     s_end.next, e_end.next, q_end.next = None, None, None
-    return s.next, e.next, q.next
+    return s.next, e.next, e_end, q.next
 
 
-def attach(L, P):
+def attach(L, L_end, P, P_end):
     if L is None:
-        return P
-    ptr = L   
-    while ptr.next:
-        ptr = ptr.next
-    ptr.next = P
-    return L
+        return P, P_end
+    if P is None:
+        return L, L_end
+    L_end.next = P
+    return L, P_end
 
+
+def qsort_rec(L):
+    if L is None or L.next is None:
+        return L, L
+    p, e, e_end, q = partition(L)
+    p, p_end= qsort_rec(p)
+    q, q_end = qsort_rec(q)
+    e, e_end = attach(e, e_end, q, q_end)
+    p, p_end = attach(p, p_end, e, e_end)
+    return p, p_end
 
 def qsort(L):
-    if L is None or L.next is None:
-        return L
-    p, e, q = partition(L)
-    p = qsort(p)
-    q = qsort(q)
-    e = attach(e, q)
-    L = attach(p, e)
+    L, _ = qsort_rec(L)
     return L
-
 
 def tab2list(A):
     H = Node()
