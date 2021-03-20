@@ -2,7 +2,6 @@ from random import randint, shuffle, seed
 
 
 def partition(T, p, r):
-    T[p], T[r] = T[r], T[p]
     x = T[r]
     i = p-1
     for j in range(p, r):
@@ -14,21 +13,24 @@ def partition(T, p, r):
 
 
 def median_of_five(T, p, r, step):
-    for i in range(r, p, -step):
-        for j in range(p, i, step):
-            if T[j] > T[j+step]:
-                T[j], T[j+step] = T[j+step], T[j]
-    tmp = p+step*(((r-p)//step)//2)
-    T[p], T[tmp] = T[tmp], T[p]
+    itr = p+step
+    while itr <= r:
+        rev = itr-step
+        while rev >= p and T[rev] > T[rev+step]:
+            T[rev], T[rev+step] = T[rev+step], T[rev]
+            rev -= step
+        itr += step
+    median_index = p+(((itr-p)//step-1)//2)*step
+    T[p], T[median_index] = T[median_index], T[p]
 
 
 def select(T, p, r):
     step = 1
     while r-p >= step:
-        for i in range(p, r, 5*step):
-            median_of_five(T, i, min(i+5*step-1, r), step)
+        for i in range(p, r, step*5):
+            median_of_five(T, i, min(r, i+step*5-1), step)
         step *= 5
-        r = r-r % (step)
+    T[p], T[r] = T[r], T[p]
 
 
 def linearselect(T, k):
@@ -47,7 +49,7 @@ def linearselect(T, k):
 
 seed(42)
 
-n = 11
+n = 10
 for i in range(n):
     A = list(range(n))
     shuffle(A)
